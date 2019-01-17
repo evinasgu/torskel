@@ -1,0 +1,34 @@
+stages:
+  - lint
+  - test
+  - build
+
+
+lint:
+  stage: lint
+  script:
+    - echo "Running linter"
+    - source $TORSKEL_ENV && cd ./torskel && flake8
+
+
+test:
+  stage: test
+  script:
+    - echo "Running tests"
+
+build_prod:
+  stage: build
+  script:
+    - echo "Building production package"
+    - rm -rf ./dist/*
+    - rm -rf ./build/*
+    - source $TORSKEL_ENV && python3 setup.py sdist bdist_wheel
+    - twine upload  ./dist/*
+
+  only:
+  - master
+
+
+
+
+
